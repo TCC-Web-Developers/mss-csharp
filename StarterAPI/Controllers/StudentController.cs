@@ -64,7 +64,7 @@ namespace StarterAPI.Controllers
                 await _context.SaveChangesAsync(ct);
 
                 string generatedStudentNo 
-                    = Convert.ToDateTime(param.DateEnrolled).ToString("MM") + "-" + newStudent.StudentId;
+                    = Convert.ToDateTime(param.DateEnrolled).ToString("yyyyMM") + "-" + newStudent.StudentId;
 
                 newStudent.StudentNo = generatedStudentNo;
 
@@ -76,10 +76,10 @@ namespace StarterAPI.Controllers
             catch (Exception exception)
             {
 
-
+                throw;
             }
 
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
 
         }
 
