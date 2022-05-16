@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StarterAPI.Interfaces;
 using StarterAPI.Persistence;
+using StarterAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 builder.Services.AddScoped<IApplicationDbContext>
     (provider => provider.GetRequiredService<ApplicationDbContext>());
 
-builder.Services.AddTransient<IStudentService, IStudentService>();
+builder.Services.AddTransient<IStudentService, StudentService>();
+builder.Services.AddTransient<IClassService, ClassService>();
 
 
 builder.Services.AddControllers();
