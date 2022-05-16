@@ -41,6 +41,8 @@ namespace StarterAPI.Services
                 throw new Exception("Class not found");
             }
 
+            _context.Classes.Remove(classItem);
+
             await _context.SaveChangesAsync(ct);
 
             return true;

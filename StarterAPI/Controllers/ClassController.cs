@@ -26,9 +26,9 @@ namespace StarterAPI.Controllers
         }
     
         [HttpGet("details")]
-        public IActionResult Get(int classId)
+        public async Task<IActionResult> Get(int classId)
         {
-            var classItem = _classService.Get(classId);
+            var classItem = await _classService.Get(classId);
             return Ok(new { data = classItem });
         }
 
@@ -41,7 +41,7 @@ namespace StarterAPI.Controllers
 
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> UpdateClass(Class request, CancellationToken ct = default)
         {
             var newClass = await _classService.UpdateClass(request, ct);
@@ -49,7 +49,7 @@ namespace StarterAPI.Controllers
 
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteClass(int classId, CancellationToken ct = default)
         {
             var isDeleted = await _classService.DeleteClass(classId, ct);
