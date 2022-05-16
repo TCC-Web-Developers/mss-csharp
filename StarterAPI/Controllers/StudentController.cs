@@ -11,11 +11,11 @@ namespace StarterAPI.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        IApplicationDbContext _context;
+        IStudentService _studentService;
 
-        public StudentController(IApplicationDbContext context)
+        public StudentController(IStudentService studentService)
         {
-            _context = context;
+            _studentService = studentService;
         }       
 
 
@@ -23,8 +23,8 @@ namespace StarterAPI.Controllers
         [HttpGet]
         public IActionResult GetStudents()
         {
-            var students = _context.Students.ToList();
-            return Ok(students);
+            var students = _studentService.Get();
+            return Ok(new { data = students });
         }
 
         // Get: api/student/{studentId}
@@ -32,62 +32,27 @@ namespace StarterAPI.Controllers
         [HttpGet("profile")]
         public async Task<IActionResult> GetStudent(int studentId)
         {
-            var student = await _context.Students.FindAsync(new object[] { studentId });
+            var student = await _studentService.Get(studentId);
 
-            if (student == null)
-            {
-                return BadRequest(new { error = "Student not found" });
-            }
-
-            return Ok(student);
+            return Ok(new { data = student });
 
 
         }
         // Post: api/student
         [HttpPost]
-        public async Task<IActionResult> CreateStudent(Student param, CancellationToken ct = default)
+        public async Task<IActionResult> CreateStudent(Student request, CancellationToken ct = default)
         {
-
-            try
-            {
-                var newStudent = new Student
-                {
-                    FirstName = param.FirstName,
-                    LastName = param.LastName,
-                    EmailAddress = param.EmailAddress,
-                    BirthDate = param.BirthDate,
-                    DateEnrolled = param.DateEnrolled,
-                };
-
-                _context.Students.Add(newStudent);
-
-                await _context.SaveChangesAsync(ct);
-
-                string generatedStudentNo 
-                    = Convert.ToDateTime(param.DateEnrolled).ToString("yyyyMM") + "-" + newStudent.StudentId;
-
-                newStudent.StudentNo = generatedStudentNo;
-
-                await _context.SaveChangesAsync(ct);
-
-                return Ok(newStudent);
-
-            }
-            catch (Exception exception)
-            {
-
-                throw;
-            }
-
-            //throw new NotImplementedException();
+            var newStudent = await _studentService.CreateStudent(request, ct);
+            return Ok(new { data = newStudent});
 
         }
 
         [HttpDelete]
-        public IActionResult DeleteStudent()
+        public async Task<IActionResult> DeleteStudent(int studentId, CancellationToken ct = default)
         {
+            var isdeleted = await _studentService.DeleteStudent(studentId, ct);
 
-            throw new NotImplementedException();
+            return Ok(new { data = isdeleted });
 
         }
     }

@@ -12,8 +12,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 );
 
 //Dependency Injection - Singleton, Scoped, Transient
-builder.Services.AddTransient<IApplicationDbContext>
+builder.Services.AddScoped<IApplicationDbContext>
     (provider => provider.GetRequiredService<ApplicationDbContext>());
+
+builder.Services.AddTransient<IStudentService, IStudentService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
