@@ -16,13 +16,14 @@ namespace StarterAPI.Services
         {
             return _context.Students.ToList();
         }
+
         public async Task<Student> Get(int studentId)
         {
             var student = await _context.Students.FindAsync(new object[] { studentId });
 
             if (student == null)
             {
-                throw new Exception("Student not found");
+                throw new KeyNotFoundException("Student not found");
             }
 
             return student;
@@ -63,7 +64,7 @@ namespace StarterAPI.Services
 
             if (student == null)
             {
-                throw new Exception("Student not found");
+                throw new KeyNotFoundException("Student not found");
             }
 
             student.FirstName = request.FirstName;
@@ -87,7 +88,7 @@ namespace StarterAPI.Services
 
             if (student == null)
             {
-                throw new Exception("Student not found");
+                throw new KeyNotFoundException("Student not found");
             }
 
             _context.Students.Remove(student);

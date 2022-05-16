@@ -38,7 +38,7 @@ namespace StarterAPI.Services
 
             if (classItem == null)
             {
-                throw new Exception("Class not found");
+                throw new KeyNotFoundException("Class not found");
             }
 
             _context.Classes.Remove(classItem);
@@ -60,7 +60,7 @@ namespace StarterAPI.Services
 
             if (classItem == null)
             {
-                throw new Exception("Class not found");
+                throw new KeyNotFoundException("Class not found");
             }
 
             return classItem;
@@ -72,7 +72,7 @@ namespace StarterAPI.Services
 
             if (classItem == null)
             {
-                throw new Exception("Class not found");
+                throw new KeyNotFoundException("Class not found");
             }
 
             //TODO: Check if class code is unique
