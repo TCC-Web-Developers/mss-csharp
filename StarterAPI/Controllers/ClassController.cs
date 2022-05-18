@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StarterAPI.Dto;
 using StarterAPI.Entities;
 using StarterAPI.Interfaces;
 
@@ -33,7 +34,7 @@ namespace StarterAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateClass(Class request, CancellationToken ct = default)
+        public async Task<IActionResult> CreateClass(ClassDto request, CancellationToken ct = default)
         {
 
             var newClass = await _classService.CreateClass(request, ct);
@@ -42,7 +43,7 @@ namespace StarterAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateClass(Class request, CancellationToken ct = default)
+        public async Task<IActionResult> UpdateClass(ClassDto request, CancellationToken ct = default)
         {
             var newClass = await _classService.UpdateClass(request, ct);
             return Ok(new { data = newClass });

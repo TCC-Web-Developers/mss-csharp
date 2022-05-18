@@ -1,23 +1,29 @@
-﻿using StarterAPI.Entities;
+﻿using AutoMapper;
+using StarterAPI.Dto;
+using StarterAPI.Entities;
 using StarterAPI.Interfaces;
+using System.Collections.Generic;
 
 namespace StarterAPI.Services
 {
     public class StudentService : IStudentService
     {
         IApplicationDbContext _context;
+        IMapper _mapper;
 
-        public StudentService(IApplicationDbContext context)
+        public StudentService(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public IEnumerable<Student> Get()
+        public IEnumerable<StudentDto> Get()
         {
-            return _context.Students.ToList();
+            var students = _context.Students.ToList();
+            return _mapper.Map<IEnumerable<StudentDto>>(students);
         }
 
-        public async Task<Student> Get(int studentId)
+        public async Task<StudentDto> Get(int studentId)
         {
             var student = await _context.Students.FindAsync(new object[] { studentId });
 
@@ -26,10 +32,10 @@ namespace StarterAPI.Services
                 throw new KeyNotFoundException("Student not found");
             }
 
-            return student;
+            return _mapper.Map<StudentDto>(student);
         }
 
-        public async Task<Student> CreateStudent(Student request, CancellationToken ct)
+        public async Task<StudentDto> CreateStudent(StudentDto request, CancellationToken ct)
         {
             var newStudent = new Student
             {
@@ -55,10 +61,10 @@ namespace StarterAPI.Services
 
             await _context.SaveChangesAsync(ct);
 
-            return newStudent;
+            return _mapper.Map<StudentDto>(newStudent);
         }
 
-        public async Task<Student> UpdateStudent(Student request, CancellationToken ct)
+        public async Task<StudentDto> UpdateStudent(StudentDto request, CancellationToken ct)
         {
             var student = await _context.Students.FindAsync(new object[] { request.StudentId });
 
@@ -78,7 +84,7 @@ namespace StarterAPI.Services
 
             await _context.SaveChangesAsync(ct);
 
-            return student;
+            return _mapper.Map<StudentDto>(student);
 
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StarterAPI.Dto;
 using StarterAPI.Entities;
 using StarterAPI.Interfaces;
 using StarterAPI.Persistence;
@@ -40,7 +41,7 @@ namespace StarterAPI.Controllers
         }
         // Post: api/student
         [HttpPost]
-        public async Task<IActionResult> CreateStudent(Student request, CancellationToken ct = default)
+        public async Task<IActionResult> CreateStudent(StudentDto request, CancellationToken ct = default)
         {
             var newStudent = await _studentService.CreateStudent(request, ct);
             return Ok(new { data = newStudent});

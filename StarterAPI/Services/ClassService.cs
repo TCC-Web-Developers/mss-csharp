@@ -1,4 +1,6 @@
-﻿using StarterAPI.Entities;
+﻿using AutoMapper;
+using StarterAPI.Dto;
+using StarterAPI.Entities;
 using StarterAPI.Interfaces;
 
 namespace StarterAPI.Services
@@ -6,13 +8,15 @@ namespace StarterAPI.Services
     public class ClassService : IClassService
     {
         IApplicationDbContext _context;
+        IMapper _mapper;
 
-        public ClassService(IApplicationDbContext context)
+        public ClassService(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Class> CreateClass(Class request, CancellationToken ct)
+        public async Task<ClassDto> CreateClass(ClassDto request, CancellationToken ct)
         {
 
             var newClass = new Class
@@ -28,7 +32,7 @@ namespace StarterAPI.Services
 
             await _context.SaveChangesAsync(ct);
 
-            return newClass;
+            return _mapper.Map<ClassDto>(newClass);
 
         }
 
@@ -49,12 +53,13 @@ namespace StarterAPI.Services
 
         }
 
-        public IEnumerable<Class> Get()
+        public IEnumerable<ClassDto> Get()
         {
-            return _context.Classes.ToList();
+            var classes = _context.Classes.ToList();
+            return _mapper.Map<IEnumerable<ClassDto>>(classes);
         }
 
-        public async Task<Class> Get(int classId)
+        public async Task<ClassDto> Get(int classId)
         {
             var classItem = await _context.Classes.FindAsync(new object[] { classId });
 
@@ -63,10 +68,10 @@ namespace StarterAPI.Services
                 throw new KeyNotFoundException("Class not found");
             }
 
-            return classItem;
+            return _mapper.Map<ClassDto>(classItem); 
         }
 
-        public async Task<Class> UpdateClass(Class request, CancellationToken ct)
+        public async Task<ClassDto> UpdateClass(ClassDto request, CancellationToken ct)
         {
             var classItem = await _context.Classes.FindAsync(new object[] { request.ClassId });
 
@@ -84,7 +89,7 @@ namespace StarterAPI.Services
 
             await _context.SaveChangesAsync(ct);
 
-            return classItem;
+            return _mapper.Map<ClassDto>(classItem);
         }
     }
 }

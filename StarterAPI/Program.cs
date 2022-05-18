@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StarterAPI.Commons.Extensions;
 using StarterAPI.Interfaces;
 using StarterAPI.Middleware;
 using StarterAPI.Persistence;
@@ -6,18 +7,10 @@ using StarterAPI.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-// Add services to the container.
-
-builder.Services.AddDbContext<ApplicationDbContext>(
-    options => 
-    options.UseSqlite("Data Source=./students.db")
-);
-
-//Dependency Injection - Singleton, Scoped, Transient
-builder.Services.AddScoped<IApplicationDbContext>
-    (provider => provider.GetRequiredService<ApplicationDbContext>());
-
+builder.Services.AddAppDbContext();
+builder.Services.AddMappingConfiguration();
 builder.Services.AddCors();
 builder.Services.AddControllers();
 
@@ -25,9 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Add DI for app services
-builder.Services.AddTransient<IStudentService, StudentService>();
-builder.Services.AddTransient<IClassService, ClassService>();
+builder.Services.AddAppDependencies();
 
 var app = builder.Build();
 
