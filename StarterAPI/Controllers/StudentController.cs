@@ -28,6 +28,13 @@ namespace StarterAPI.Controllers
             return Ok(new { data = students });
         }
 
+        [HttpGet("ledger")]
+        public async Task<IActionResult> GetStudents(string searchKey)
+        {
+            var students = await _studentService.Get(searchKey);
+            return Ok(new { data = students });
+        }
+
         // Get: api/student/{studentId}
         // Get: api/student/profile?studentId=
         [HttpGet("profile")]

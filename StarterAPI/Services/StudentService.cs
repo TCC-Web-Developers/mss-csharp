@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using StarterAPI.Commons.Mappings;
+using StarterAPI.Commons.SharedModels;
 using StarterAPI.Dto;
 using StarterAPI.Entities;
 using StarterAPI.Interfaces;
 using System.Collections.Generic;
+using System.Dynamic;
 
 namespace StarterAPI.Services
 {
@@ -104,6 +109,23 @@ namespace StarterAPI.Services
             return true;
         }
 
+        //public async Task<IEnumerable<StudentListDto>> Get(string searchKey, string studentNo, string courseName, DateTime dateEnrolledFrom, DateTime dateEnrolledTo, PagingQuery pagingQuery)
+        public async Task<IEnumerable<StudentLedgerItemDto>> Get(string searchKey)
+        {
+            //var students = _context.Students.ToList();
+
+            var students = await _context.Students
+                .Where(o => EF.Functions.Like((o.LastName + ", " + o.FirstName).ToUpper(), $"%{searchKey.ToUpper()}%"))
+                //.Select(a => new { a.FirstName, a.LastName, a.StudentNo, a.DateEnrolled, a.CourseName, a.Profile })
+                //.ProjectToListAsync<StudentLedgerItemDto>(_mapper.ConfigurationProvider);
+                .ProjectTo<StudentLedgerItemDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+                //.ToListAsync();
+
+            //return _mapper.Map<IEnumerable<StudentLedgerItemDto>>(students);
+            return students;
+
+        }
 
     }
 }

@@ -9,6 +9,9 @@ namespace StarterAPI.Commons.Mappings
         public MappingProfiles()
         {
             CreateMap<Student, StudentDto>().ReverseMap();
+            CreateMap<Student, StudentLedgerItemDto>().ReverseMap();
+
+
             CreateMap<Class, ClassDto>().ReverseMap();
 
         }
