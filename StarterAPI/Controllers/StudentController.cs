@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StarterAPI.Commons.SharedModels;
 using StarterAPI.Dto;
 using StarterAPI.Entities;
 using StarterAPI.Interfaces;
 using StarterAPI.Persistence;
+using StarterAPI.Queries;
 
 namespace StarterAPI.Controllers
 {
@@ -29,10 +31,29 @@ namespace StarterAPI.Controllers
         }
 
         [HttpGet("ledger")]
-        public async Task<IActionResult> GetStudents(string searchKey)
+        public async Task<IActionResult> GetStudents(
+
+            [FromQuery]  GetStudentLedgerQuery request
+
+            //string searchKey = "", 
+            //string studentNo = "", string courseName = "", DateTime? dateEnrolledFrom = null, 
+            //DateTime? dateEnrolledTo = null, int page = 0, int perPage = 0, int lastCursorId = 0, 
+            //string sortField = "", string sortOrder = ""
+
+            )
         {
-            var students = await _studentService.Get(searchKey);
-            return Ok(new { data = students });
+
+            //var pagingQuery = new PagingQuery {
+            //    SortField = sortField, SortOrder = sortOrder,
+            //    Page = page, PerPage = perPage, LastCursorId = lastCursorId };
+
+            var students = await _studentService.GetPaginatedAndSorted(request);
+
+            //var students = await _studentService.Get(searchKey, studentNo, courseName, 
+            //    dateEnrolledFrom, dateEnrolledTo, pagingQuery);
+
+
+            return Ok(students);
         }
 
         // Get: api/student/{studentId}

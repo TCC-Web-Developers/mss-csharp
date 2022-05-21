@@ -36,6 +36,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    AppDbSeeder.CreateMockStudentsIfNotExists(app);
+
 }
 
 app.UseHttpsRedirection();

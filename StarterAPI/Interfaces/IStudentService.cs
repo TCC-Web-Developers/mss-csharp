@@ -1,6 +1,7 @@
 ﻿using StarterAPI.Commons.SharedModels;
 using StarterAPI.Dto;
 using StarterAPI.Entities;
+using StarterAPI.Queries;
 
 namespace StarterAPI.Interfaces
 {
@@ -8,8 +9,10 @@ namespace StarterAPI.Interfaces
     {
         IEnumerable<StudentDto> Get();
 
-        //Task<IEnumerable<StudentListDto>> Get(string searchKey, string studentNo, string courseName, DateTime dateEnrolledFrom, DateTime dateEnrolledTo, PagingQuery pagingQuery)
-        Task<IEnumerable<StudentLedgerItemDto>> Get(string searchKey);
+        //Task<IEnumerable<StudentLedgerItemDto>> Get(string searchKey, string studentNo, string courseName, DateTime? dateEnrolledFrom, DateTime? dateEnrolledTo, PagingQuery pagingQuery);
+        Task<IEnumerable<StudentLedgerItemDto>> Get(GetStudentLedgerQuery query);
+
+        Task<PaginatedResult<IEnumerable<StudentLedgerItemDto>>> GetPaginatedAndSorted(GetStudentLedgerQuery query);
 
         Task<StudentDto> Get(int studentId);
 
